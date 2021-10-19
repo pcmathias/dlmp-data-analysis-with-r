@@ -11,9 +11,9 @@ These R lessons aim to teach participants with minimal programming experience th
 
 For the best experience, please have the following ready before the workshop begins:
 
-- Please sign up for a free RStudio Cloud account (or link it to one of your existing accounts) [here](https://rstudio.cloud/).
+- Please sign up for a free RStudio Cloud account  [here](https://rstudio.cloud/). You can sign up/link to the Google account linked to your UW email if you do not want to create a separate username and password.
 - Install the latest version of [Google Chrome](https://www.google.com/chrome/) as some [older browsers](https://support.rstudio.com/hc/en-us/articles/227449447-Supported-browsers-for-RStudio-Connect) may not be compatible with the RStudio application).
-- Please complete the following survey so we can better understand your R experience and what you want out of the course: [AACC R Workshop Participant Survey](https://forms.gle/KwxToYefigwYS9MP6).
+- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://forms.gle/dbHFmNYaXSLup2Ni9).
 
 ## Accessing/interacting with the course content
 
