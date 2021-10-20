@@ -7,7 +7,7 @@ These R lessons aim to teach participants with minimal programming experience th
 - Instructor: 
   * [Patrick Mathias](https://www.linkedin.com/in/pcmathias/)
   
-## Before you arrive
+## Before your first lesson
 
 For the best experience, please have the following ready before the workshop begins:
 
@@ -19,12 +19,14 @@ For the best experience, please have the following ready before the workshop beg
 
 1. Course content will be pre-loaded into the RStudio Cloud instance, so we will cover how to access it at the beginning of the course
 2. The content is available at our [github page](https://github.com/pcmathias/dlmp-data-analysis-with-r) and can be downloaded from there as well.
-3. If you have a tablet you may find it useful to bring and use that to act as a second screen: you work on your laptop to complete exercises and use your tablet to review the lesson slides that were just covered.
+3. If you have a tablet you may find it useful to use that as a second screen: you work on your laptop to complete exercises and use your tablet to review the lesson slides that were just covered.
 4. This will be a virtual course. Please type questions into the Zoom chat and the instructor and/or a teaching assistant will answer in the chat or open a discussion with the group.
 
 ## Installing RStudio onto your own computer
 
 We will be utilizing our cloud based RStudio instance in the workshop. However, _in the long term_, you will need R and RStudio installed **on your own computer** in order to work on private data. You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)).
+
+For users working with sensitive data within DLMP (e.g. staff and faculty involved with clinical testing), instructions will be provided via email to access a web instance of RStudio that can securely work with sensitive data.
 
 ## Acknowledgments
 
