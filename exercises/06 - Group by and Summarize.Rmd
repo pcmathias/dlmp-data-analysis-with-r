@@ -1,0 +1,183 @@
+---
+title: "Grouping and Summarizing"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+## Setup
+
+```{r setup}
+library(tidyverse)  # Provides functions used throughout this session
+
+covid_testing <- read_csv("covid_testing.csv")
+```
+
+## Summarize
+
+### How many tests are performed per day?
+```{r}
+ggplot(data = covid_testing) +
+  geom_histogram(aes(x = pan_day), binwidth = 1)
+```
+
+
+```{r}
+covid_testing %>%
+  select(mrn, pan_day) %>%
+  head(4) %>%
+	summarize(order_count = n(),
+	          day_count    = n_distinct(pan_day)) 
+```
+
+## Your Turn 1
+
+Fill in gaps in code below to:
+
+a) Calculate the mean count of orders per `pan_day`. Hint: no additional functions are needed for this calculation.
+ 
+```{r, eval=FALSE}
+stats_1a <- covid_testing %>%
+	summarize(order_count = n(),
+	          day_count = n_distinct(pan_day),
+	          order_count_mean = _______________)
+stats_1a
+```
+
+b) Calculate the mean count of orders per clinic
+
+```{r, eval=FALSE}
+stats_1b <- covid_testing %>%
+	summarize(order_count = n(),
+	          clinic_count = ______________),
+	          order_count_mean = _________________)
+stats_1b
+```
+
+## Summarize examples
+
+### Last pandemic day (in data)
+```{r, eval=FALSE}
+covid_testing %>%
+  summarize(last_day = ____(pan_day))
+```
+
+### Median turnaround time
+```{r, eval=FALSE}
+covid_testing %>%
+  mutate(col_ver_tat = col_rec_tat + rec_ver_tat) %>%
+  summarize(col_ver_tat_mean = mean(col_ver_tat))
+```
+
+## Your Turn 2
+
+```{r}
+covid_testing %>%
+  mutate(col_ver_tat = col_rec_tat + rec_ver_tat) %>%
+  summarize(___________ = ______________)
+```
+
+
+## group_by
+
+```{r}
+covid_testing %>% 
+  group_by(pan_day)
+```
+
+## group_by %>% summarize
+
+```{r}
+covid_testing %>%
+	group_by(pan_day) %>%
+	summarize(order_count = n())
+```
+
+## Your Turn 3
+
+a) Calculate the median turnaround time for each day
+
+```{r, eval=FALSE}
+covid_testing %>%
+  mutate(col_ver_tat = ________________) %>%
+  group_by(______) %>%
+  summarize(col_ver_tat_median = ___________)
+```
+
+b) The median number of orders per day (Hint: a data frame that is grouped and summarized can be summarized again)
+
+```{r, eval=FALSE}
+covid_testing %>%
+  group_by(_________) %>%
+  summarize(n_orders = __________) %>%
+  summarize(n_orders_median = _____________)
+```
+
+## Group_by %>% Summarize examples
+
+### Number of tests per day
+```{r, eval=FALSE}
+tmp <- covid_testing %>%
+  group_by(pan_day) %>%
+  summarize(n_tests = n())
+
+ggplot(data = tmp) +
+  geom_point(aes(x = pan_day, y = n_tests)) +
+  geom_smooth(aes(x = pan_day, y = n_tests), method = 'loess') +
+  ylab("# of tests") +
+  xlab("Pandemic day")
+```
+
+## What else
+
+### Test for association
+```{r}
+covid_testing_2 <- covid_testing %>%
+  mutate(payor_group_fac = case_when(
+				is.na(payor_group) 			     ~ "unassigned",
+				payor_group %in% c("charity care", 
+						    "medical assistance", 
+						    "self pay", 
+					            "other") 		     ~ "other",
+									TRUE ~ payor_group)
+  ) %>%
+  filter(result %in% c("positive", "negative"))
+```
+
+```{r}
+# Generate counts
+tmp_table_tall <- covid_testing_2 %>% 
+  group_by(payor_group_fac, result) %>%
+  summarize(n = n()) %>%
+  ungroup()
+tmp_table_tall
+
+# Pivot from tall to wide table
+tmp_table_wide <- tmp_table_tall %>%
+  spread(key = "result", value = "n")
+tmp_table_wide
+```
+
+```{r}
+# Hypergeometric test for association
+tmp_table_wide %>%
+  select(-payor_group_fac) %>%
+  fisher.test(simulate.p.value = T)
+```
+
+### Logistic Regression
+```{r}
+tmp <- covid_testing_2 %>%
+  filter(payor_group_fac %in% c("commercial", "government")) %>%
+  mutate(result_fac = factor(result, 
+                             levels=c("negative", "positive"), 
+                             ordered=T),
+         payor_group_fac = (payor_group == "government"))
+tmp_fit <- glm(result_fac ~ payor_group_fac + age,  	# model formula
+               data = tmp,                           	# dataset
+               family = "binomial"                    # type of model
+  )
+summary(tmp_fit)
+exp(coefficients(tmp_fit))  					                # odds
+```
+

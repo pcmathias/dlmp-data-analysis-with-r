@@ -1,0 +1,46 @@
+---
+title: "COVID-19 Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+
+
+covid_testing <- read_csv("covid_testing.csv")
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Test Volumes Over Time
+
+```{r, fig.width=10}
+ggplot(data = covid_testing, mapping = aes(x = pan_day)) +
+  geom_bar(stat = "count")
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### In Lab Turnaround Times
+
+```{r}
+ggplot(covid_testing) +
+  geom_point(mapping = aes(x = pan_day, y = rec_ver_tat)) +
+  ylim(0, 50)
+```
+
+### Distribution of Cycle Threshold Values
+
+```{r}
+covid_positive <- covid_testing %>%
+  filter(result == "positive")
+ggplot(data = covid_positive, mapping = aes(x = ct_value)) +
+  geom_histogram(binwidth = 1)
+```
+
