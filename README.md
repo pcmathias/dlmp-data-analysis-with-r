@@ -21,7 +21,7 @@ For the best experience, please have the following ready before the workshop beg
 
 ## Installing RStudio onto your own computer
 
-We will be utilizing our cloud based RStudio instance in the workshop. However, _in the long term_, you will need R and RStudio installed **on your own computer** in order to work on private data. You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)).
+We will be utilizing our cloud based RStudio instance in the workshop. However, _in the long term_, you will need R and RStudio installed **on your own computer** in order to work on private data. You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)). At each step, select the most recent version of R and RStudio available for your operating system (it may not match the versions installed in the videos but the steps will be the same).
 
 For users working with sensitive data within DLMP (e.g. staff and faculty involved with clinical testing), instructions will be provided via email to access a web instance of RStudio that can securely work with sensitive data.
 
