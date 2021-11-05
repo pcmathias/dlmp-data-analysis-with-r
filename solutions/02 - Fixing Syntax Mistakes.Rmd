@@ -1,0 +1,44 @@
+---
+title: "Exercise for 01 - Fixing Syntax Mistakes"
+output: html_document
+---
+
+I’ve written some code to create a sequence from 0 to 500 in increments of 25 called sequence_of_25s.  Ultimately I want to calculate the median value of this sequence.  Unfortunately I’ve made some mistakes in my code and I am hoping you can help me find them.
+
+```{r}
+
+sequence_of_25s -< seq(from=0 to=50, by=25)
+
+```
+
+My first code chunk (above) includes 3 errors:
+1 - The assignment operator is typed incorrectly
+2 - I am missing a comma to separate my "from" and "to" arguments
+3 - I intended to create a sequence from 0-500, but I accidentally typed 50 instead
+
+Below is the corrected code
+
+```{r}
+
+sequence_of_25s <- seq(from=0, to=500, by=25)
+
+```
+
+```{r}
+
+median(sequence of_25s]
+
+```
+
+My second code chunk chunk (above) includes 2 errors:
+1 - I misspelled my object name sequence_of_25s
+2 - I closed my median function with a square bracket "]" instead of a parenthesis ")"
+
+Below is the corrected code
+
+```{r}
+
+median(sequence_of_25s)
+
+```
+
