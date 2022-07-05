@@ -10,7 +10,7 @@ For the best experience, please have the following ready before the workshop beg
 
 - Please sign up for a free RStudio Cloud account  [here](https://rstudio.cloud/). You can sign up/link to the Google account linked to your UW email if you do not want to create a separate username and password.
 - Install the latest version of [Google Chrome](https://www.google.com/chrome/) as some [older browsers](https://support.rstudio.com/hc/en-us/articles/227449447-Supported-browsers-for-RStudio-Connect) may not be compatible with the RStudio application.
-- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://forms.gle/dbHFmNYaXSLup2Ni9).
+- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://forms.gle/G6HhAxsHeBXKJtkZ7).
 
 ## Accessing/interacting with the course content
 
@@ -19,11 +19,13 @@ For the best experience, please have the following ready before the workshop beg
 3. If you have a tablet you may find it useful to use that as a second screen: you work on your laptop to complete exercises and use your tablet to review the lesson slides that were just covered.
 4. This will be a virtual course. Please type questions into the Zoom chat and the instructor and/or a teaching assistant will answer in the chat or open a discussion with the group.
 
+## Using the DLMP instance of RStudio Server
+
+For clinical users in DLMP (e.g. staff, faculty, and trainees working with clinical data), we provide access to an instance of RStudio Server that you can sign into and perform your work on a scientific server securely. We will share more info about this instance to eligible users.
+
 ## Installing RStudio onto your own computer
 
-We will be utilizing our cloud based RStudio instance in the workshop. However, _in the long term_, you will need R and RStudio installed **on your own computer** in order to work on private data. You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)). At each step, select the most recent version of R and RStudio available for your operating system (it may not match the versions installed in the videos but the steps will be the same).
-
-For users working with sensitive data within DLMP (e.g. staff and faculty involved with clinical testing), instructions will be provided via email to access a web instance of RStudio that can securely work with sensitive data.
+We will be utilizing our cloud based RStudio instance in the workshop. You may want to install R and RStudio installed **on your own computer** in order to work on projects (though using the department-provided instance would be preferred, especially if you are working with protected health information). You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)). At each step, select the most recent version of R and RStudio available for your operating system (it may not match the versions installed in the videos but the steps will be the same).
 
 ## Acknowledgments
 
