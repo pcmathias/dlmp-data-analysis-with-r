@@ -36,7 +36,7 @@ Without writing any code, just by working with the Data Viewer, try to answer th
   
   2. Go ahead and try to edit one of the values in this viewer. You will find that you can't. It would have been easy for the RStudio programmers to allow editing of specific values, but they decided not to add that feature. Why do you think this was designed that way?
 
-  3. Each row in *covid_testing* represents a single COVID19 test. The value in the *pan_day* column indicates the day (after the start of the pandemic) on which the test sample was taken. On which "pandemic day" was the first test sample taken? The last?
+  3. Each row in *covid_testing* represents a single COVID19 test. The value in the *pan_day* column indicates the day (after the start of the pandemic) on which the test sample was taken. Note that clicking on the column (variable) names allows you to sort in ascending or descending order. On which "pandemic day" was the first test sample taken? The last?
 
   4. How many tests overall were positive? How many positive tests were there in the first 30 days of the pandemic? (Hint: look at the Filter button)
   
