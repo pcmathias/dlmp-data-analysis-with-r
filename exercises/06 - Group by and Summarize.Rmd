@@ -79,7 +79,7 @@ covid_testing |>
 covid_testing |>
   mutate(col_ver_tat = col_rec_tat + rec_ver_tat) |>
   summarize(col_ver_tat_mean = mean(col_ver_tat),
-		    col_ver_75_pctile = quantile(col_ver_tat, 0.75)
+		    col_ver_75_pctile = quantile(col_ver_tat, 0.75))
 ```
 
 ## Your Turn 2
