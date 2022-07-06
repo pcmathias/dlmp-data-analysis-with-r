@@ -115,6 +115,14 @@ covid_testing %>%
 
 ## Group_by %>% Summarize examples
 
+### 95th percentile turnaround time per clinic
+
+```{r}
+covid_testing %>%
+  group_by(clinic_name) %>%
+  summarize(tat_95th_pctile = quantile(rec_ver_tat, 0.95))
+```
+
 ### Number of tests per day
 ```{r, eval=FALSE}
 tmp <- covid_testing %>%
