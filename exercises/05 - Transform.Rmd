@@ -49,15 +49,15 @@ day_10 <- arrange(day_10 , clinic_name)
 # vs
 
 # This code accomplishes the same task and is far more legible. 
-covid_testing %>% 
-  filter(pan_day <= 10) %>% 
-  select(clinic_name) %>% 
+covid_testing |> 
+  filter(pan_day <= 10) |> 
+  select(clinic_name) |> 
   arrange(clinic_name)
 ```
 
 ## Your Turn 2
 
-Use `%>%` in the following chunk to write a sequence of functions that: 
+Use `|>` in the following chunk to write a sequence of functions that: 
 
 1. Filters to tests from the clinic (`clinic_name`) of "picu"
 
@@ -68,9 +68,9 @@ Use `%>%` in the following chunk to write a sequence of functions that:
 Using "<-", assign the result to a new variable, call it whatever you want.
 
 ```{r Your Turn 2, eval=FALSE}
-covid_testing %>% 
-  filter(________) %>% #Here filter to the clinic with the name "picu"
-  select(________) %>% #Here select the columns you want to keep
+covid_testing |>  
+  filter(________) |>  #Here filter to the clinic with the name "picu"
+  select(________) |>  #Here select the columns you want to keep
   arrange(________)    #Here arrange the pan_day column from highest to lowest (HINT: See the arrange section of this file to see how to use the desc() function)
 ```
 
@@ -88,7 +88,7 @@ Use your mouse to select the name of the new data frame from the list of objects
 
 ```{r}
 # The following code creates a data frame with a new column called c_r_tat_mins which contains the collect to receive TAT quantified in minutes.
-covid_testing %>%
+covid_testing |>
 	mutate(c_r_tat_mins = col_rec_tat*60)
 ```
 
@@ -98,14 +98,14 @@ Create a new column using the mutate() function that contains the total TAT.
 Hint: The total TAT is the sum of `col_rec_tat` and `rec_ver_tat`
 
 ```{r Your Turn 3, eval=FALSE}
-covid_testing %>%
+covid_testing  |> 
 	mutate(total_tat = _________)
 ```
 
 ## Replace a column with `mutate()`
 
 ```{r}
-covid_testing %>%
+covid_testing |> 
 	mutate(mrn = as.character(mrn))
 ```
 
