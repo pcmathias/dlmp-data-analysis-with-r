@@ -1,0 +1,216 @@
+---
+title: "Grouping and Summarizing"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+## Setup
+
+```{r setup}
+library(tidyverse)  # Provides functions used throughout this session
+
+covid_testing <- read_csv("covid_testing.csv")
+```
+
+## Summarize
+
+### How many tests are performed per day?
+```{r}
+ggplot(data = covid_testing) +
+  geom_histogram(aes(x = pan_day), binwidth = 1)
+```
+
+### Row counting functions
+
+There are many functions built to work with `summarize()` that can help with counting rows. `n()` returns the number of rows and `n_distinct()` returns the number of distinct (unique) rows for a given variable.
+
+```{r}
+covid_testing |> 
+  select(mrn, pan_day) |> 
+  head(4) |> 
+	summarize(order_count = n(),
+	          day_count    = n_distinct(pan_day)) 
+```
+
+### Calculations within summarize
+
+Within the `summarize()` function, you can perform calculations on the new variables you created.
+
+```{r, eval=FALSE}
+covid_testing |> 
+	summarize(order_count = n(),
+	          day_count = n_distinct(pan_day),
+	          orders_per_day = order_count/day_count)
+```
+
+## Your Turn 1
+
+Fill in gaps in code below to calculate the average count of orders per clinic
+
+```{r, eval=FALSE}
+stats_1b <- covid_testing |>
+	summarize(order_count = n(),
+	          clinic_count = ______________),
+	          orders_per_clinic = _________________)
+stats_1b
+```
+
+## Summarize examples
+
+### Last pandemic day (in data)
+
+```{r, eval=FALSE}
+covid_testing |>
+  summarize(last_day = ____(pan_day))
+```
+
+### Median turnaround time
+
+```{r, eval=FALSE}
+covid_testing |>
+  mutate(col_ver_tat = col_rec_tat + rec_ver_tat) |>
+  summarize(col_ver_tat_mean = mean(col_ver_tat))
+```
+
+### Median and 75th percentile turnaround time
+
+```{r, eval = FALSE}
+covid_testing |>
+  mutate(col_ver_tat = col_rec_tat + rec_ver_tat) |>
+  summarize(col_ver_tat_mean = mean(col_ver_tat),
+		    col_ver_75_pctile = quantile(col_ver_tat, 0.75))
+```
+
+## Your Turn 2
+
+For the covid_testing data frame, calculate both the median and the 95th percentile collect-to-verify turnaround time.
+
+```{r}
+covid_testing |> 
+  mutate(col_ver_tat = col_rec_tat + rec_ver_tat) |> 
+  summarize(___________ = ______________,
+            ___________ = ______________)
+```
+
+## group_by
+
+```{r}
+covid_testing |> 
+  group_by(pan_day)
+```
+
+## group_by |> summarize
+
+```{r}
+covid_testing |>
+	group_by(pan_day) |>
+	summarize(order_count = n())
+```
+
+## Your Turn 3
+
+Calculate: 
+a) The median turnaround time for each day
+
+```{r, eval=FALSE}
+covid_testing  |> 
+  mutate(col_ver_tat = ________________) |> 
+  group_by(______) |> 
+  summarize(col_ver_tat_median = ___________)
+```
+
+b) The median collect-to-verify turnaround time for each clinic/unit
+
+```{r, eval=FALSE}
+covid_testing |> 
+  mutate(col_ver_tat = ________________) |> 
+  group_by(_________) |> 
+  summarize(col_ver_tat_median = ___________)
+```
+
+c) The median number of orders per day
+
+```{r}
+covid_testing |> 
+   group_by(_________) |> 
+   summarize(_________) |> 
+  
+```
+
+## group_by |> summarize examples
+
+### 95th percentile turnaround time per clinic
+
+```{r}
+covid_testing |>
+  group_by(clinic_name) |>
+  summarize(tat_95th_pctile = quantile(rec_ver_tat, 0.95))
+```
+
+### Number of tests per day
+```{r, eval=FALSE}
+tmp <- covid_testing |>
+  group_by(pan_day) |>
+  summarize(n_tests = n())
+
+ggplot(data = tmp) +
+  geom_point(aes(x = pan_day, y = n_tests)) +
+  geom_smooth(aes(x = pan_day, y = n_tests), method = 'loess') +
+  ylab("# of tests") +
+  xlab("Pandemic day")
+```
+
+## What else
+
+### Test for association
+```{r}
+covid_testing_2 <- covid_testing |>
+  mutate(payor_group_fac = case_when(
+				is.na(payor_group) 			     ~ "unassigned",
+				payor_group %in% c("charity care", 
+						    "medical assistance", 
+						    "self pay", 
+					            "other") 		     ~ "other",
+									TRUE ~ payor_group)
+  ) |>
+  filter(result %in% c("positive", "negative"))
+```
+
+```{r}
+# Generate counts
+tmp_table_tall <- covid_testing_2 |> 
+  group_by(payor_group_fac, result) |>
+  summarize(n = n()) |>
+  ungroup()
+tmp_table_tall
+
+# Pivot from tall to wide table
+tmp_table_wide <- tmp_table_tall |>
+  spread(key = "result", value = "n")
+tmp_table_wide
+```
+
+```{r}
+# Hypergeometric test for association
+tmp_table_wide |>
+  select(-payor_group_fac) |>
+  fisher.test(simulate.p.value = T)
+```
+
+### Logistic Regression
+```{r}
+tmp <- covid_testing_2 |>
+  filter(payor_group_fac %in% c("commercial", "government")) |>
+  mutate(result_fac = factor(result, 
+                             levels=c("negative", "positive"), 
+                             ordered=T),
+         payor_group_fac = (payor_group == "government"))
+tmp_fit <- glm(result_fac ~ payor_group_fac + age,  	# model formula
+               data = tmp,                           	# dataset
+               family = "binomial"                    # type of model
+  )
+summary(tmp_fit)
+exp(coefficients(tmp_fit))  					                # odds
+```
+

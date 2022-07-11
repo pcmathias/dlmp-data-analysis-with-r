@@ -1,0 +1,112 @@
+---
+title: "Transform Data"
+---
+
+## Reload data set
+
+```{r, message=FALSE}
+library(tidyverse)  # Provides functions used throughout this session
+
+covid_testing <- read_csv("covid_testing.csv") #Read in data
+```
+
+
+# Arrange
+
+```{r arrange, eval=FALSE}
+arrange(covid_testing, first_name) #Sort in alphabetical order
+arrange(covid_testing, desc(mrn))  #Sort from largest to smallest MRN
+```
+
+## Your Turn 1
+
+The column `ct_value` contains the cycle threshold (Ct) for the real-time PCR that generated the final result.
+
+How might you use arrange() to determine the highest and lowest Ct result in the dataset? (Hint: Try sorting the rows by the Ct result value contained in the column named `ct_value`) 
+
+```{r Your Turn 1, eval=FALSE}
+#replace the ____ with the name of the column you would like to arrange the dataframe by.
+arrange(covid_testing, ct_value)
+arrange(covid_testing, desc(ct_value))
+```
+
+
+## Pop Quiz
+
+```{r pop quiz}
+toy_data <- data.frame(nums=c(50,1000,3),chars=c("50","1000","3"))
+arrange(toy_data,nums)
+arrange(toy_data,chars)
+```
+
+## Steps and the pipe
+
+```{r Steps and the pipe}
+# These 3 lines of code are an example of the how we would accomplish a multi-step analysis based on what we've learned so far. 
+day_10 <- filter(covid_testing, pan_day <= 10)
+day_10 <- select(day_10, clinic_name)
+day_10 <- arrange(day_10 , clinic_name)
+
+# vs
+
+# This code accomplishes the same task and is far more legible. 
+covid_testing |> 
+  filter(pan_day <= 10) |> 
+  select(clinic_name) |> 
+  arrange(clinic_name)
+```
+
+## Your Turn 2
+
+Use `|>` in the following chunk to write a sequence of functions that: 
+
+1. Filters to tests from the clinic (`clinic_name`) of "picu"
+
+2. Selects the column with the receive to verify turnaround time (`rec_ver_tat`) as well as the day from start of the pandemic (`pan_day`)
+
+3. Arrange the `pan_day` from highest to lowest so you can see most recent tests on top.
+
+Using "<-", assign the result to a new variable, call it whatever you want.
+
+```{r Your Turn 2, eval=FALSE}
+covid_testing |>  
+  filter(clinic_name == "picu") |>  #Here filter to the clinic with the name "picu"
+  select(pan_day, rec_ver_tat) |>  #Here select the columns you want to keep
+  arrange(desc(pan_day))    #Here arrange the pan_day column from highest to lowest (HINT: See the arrange section of this file to see how to use the desc() function)
+```
+
+
+## Pipe Bonus Challenge (only if you have time)
+
+Use your mouse to select the name of the new data frame from the list of objects in the Environment tab in the upper-right pane of Rstudio. Answer the following questions:
+
+- Can you find the test that exceeded 10 hours in TAT?
+- What is the typical TAT for the PICU?
+- Given this data, does it appear that there is a chronic problem in TAT for the PICU, or was this test an outlier?
+
+
+# mutate
+
+```{r}
+# The following code creates a data frame with a new column called c_r_tat_mins which contains the collect to receive TAT quantified in minutes.
+covid_testing |>
+	mutate(c_r_tat_mins = col_rec_tat*60)
+```
+
+## Your Turn 3
+
+Create a new column using the mutate() function that contains the total TAT. 
+Hint: The total TAT is the sum of `col_rec_tat` and `rec_ver_tat`
+
+```{r Your Turn 3, eval=FALSE}
+covid_testing  |> 
+	mutate(total_tat = col_rec_tat + rec_ver_tat)
+```
+
+## Replace a column with `mutate()`
+
+```{r}
+covid_testing |> 
+	mutate(mrn = as.character(mrn))
+```
+
