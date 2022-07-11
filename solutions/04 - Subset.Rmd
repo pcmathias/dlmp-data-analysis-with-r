@@ -1,0 +1,99 @@
+---
+title: "Subset Data"
+---
+
+## Your Turn 1
+
+```{r Your Turn 1, message=FALSE}
+library(tidyverse)  # Provides functions used throughout this session
+
+covid_testing <- read_csv("covid_testing.csv") #Read in data
+```
+
+How can you confirm that you have successfully loaded the data file into Rstudio?
+
+	1. The code that imported the data did not yield an error
+	2. Code that references `covid_testing` object runs without errors
+	3. The `covid_testing` object is present in the environment pane
+	4. All of the above
+
+
+# select()
+
+```{r select}
+select(covid_testing, mrn, last_name)   # select columns to keep
+select(covid_testing, -mrn, -last_name) # select columns to remove 
+```
+
+## Your Turn 2
+
+A. Alter the code to select just the `first_name` column. Assign the result to `covid_testing_2a` and show the resulting data frame by executing the following line with just the name of the object: `covid_testing_2a` 
+
+```{r Your Turn 2, eval=FALSE}
+# Remove the "_______" and replace it with your answer
+covid_testing_2a <- select(covid_testing, first_name)
+covid_testing_2a
+```
+
+B. If you have time, alter this line of code and see if you can select all columns EXCEPT the `first_name` column.
+
+```{r Your Turn 2b, eval=FALSE}
+# Remove the "_______" and replace it with your answer
+covid_testing_2b <- select(covid_testing, -first_name)
+covid_testing_2b
+```
+
+## Select Bonus Challenge (only if you have time)
+
+If you have extra time try the following challenge:
+
+In the `covid_testing` dataset the turnaround time metrics are labeled `col_rec_tat` and `rec_var_tat`. Your goal is to select just these columns. Using what we learned as well as the dplyr cheatsheet which of the following code snippets could you use to select these columns?
+
+```{r select challenge, eval=FALSE}
+select(covid_testing, contains("rec"))
+select(covid_testing, col_rec_tat, rec_ver_tat)
+select(covid_testing, ends_with("tat"))
+#all of the above
+```
+
+
+# filter()
+
+```{r}
+# Filters the covid testing dataset to just rows in which the mrn column is equal to 5000078
+filter(covid_testing, mrn == 5000078)
+```
+
+```{r}
+# Filters the covid testing dataset to just rows in which the last_name column is equal to "stark"
+filter(covid_testing, last_name=="stark")
+```
+
+## Your Turn 3
+
+Use the 3 code blocks below, and `filter()`, to show how you would filter the `covid_testing` dataset.
+
+
+A. You work in a pediatric hospital so there shouldn't too many adults in the data set. Find every test for patients over age 80. The column in which age is found is named `age`. Assign the new data frame to the object `covid_testing_3a`.
+```{r Your Turn 3a, eval=FALSE}
+#replace the ____ with a logical statement identifying tests for patients greater than 80
+covid_testing_3a <- filter(covid_testing, age > 80) 
+covid_testing_3a
+```
+
+
+B. Do we have a lot of outreach work for COVID testing? Find all of the covid testing where the demographic group (`demo_group`) is equal to "client". Assign the new data frame to the object `covid_testing_3b`.
+```{r Your Turn 3b, eval=FALSE}
+#replace the ____ with a logical statement identifying tests for patients with demo_group equal to "client"
+covid_testing_3b <- filter(covid_testing, demo_group == "client")
+covid_testing_3b
+```
+
+## Filter Bonus Challenge (only if you have time)
+
+We may have some data anomalies in the data set. Find all of the covid testing where the patient class (column `patient_class`) is not entered. In these cases the value will be NA. NA stands for "not available". It is the way that R codes missing values.  [Hint: See slide titled "Logical Tests"]
+```{r Your Turn 3c, eval=FALSE}
+covid_testing_3c <- filter(covid_testing, is.na(patient_class))
+covid_testing_3c
+```
+
