@@ -68,10 +68,11 @@ Use `|>` in the following chunk to write a sequence of functions that:
 Using "<-", assign the result to a new variable, call it whatever you want.
 
 ```{r Your Turn 2, eval=FALSE}
-covid_testing |>  
-  filter(________) |>  #Here filter to the clinic with the name "picu"
-  select(________) |>  #Here select the columns you want to keep
-  arrange(________)    #Here arrange the pan_day column from highest to lowest (HINT: See the arrange section of this file to see how to use the desc() function)
+
+
+
+
+
 ```
 
 
