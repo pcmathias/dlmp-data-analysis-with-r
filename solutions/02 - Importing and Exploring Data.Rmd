@@ -1,5 +1,5 @@
 ---
-title: "Exercise for 01 - Importing and Exploring Data"
+title: "Exercise for 02 - Importing and Exploring Data"
 output: html_document
 ---
 
@@ -46,7 +46,11 @@ Without writing any code, just by working with the Data Viewer, try to answer th
   
   Important: this doesn't actually change the data in the `covid_testing` data frame! 
 
-  4. How many tests overall were positive? How many positive tests were there in the first 30 days of the pandemic? (Hint: look at the Filter button)
+  4. Are there any variables that have missing data? How do you know?
+  
+  payor_group and patient_class were missing data. The NAs indicate missing data.
+  
+  5. How many tests overall were positive? How many positive tests were there in the first 30 days of the pandemic? (Hint: look at the Filter button)
   
   The `result` column holds that information. We can apply a filter to that column to only show us rows where the value in the `result` column is "positive". Click on Filter and enter "positive" in the text field that appears below the `result` header. You will now see that the bottom line of the data viewer reads "Showing 1 to [some number] of 865 entries, 17 total columns (filtered from 15,524 total entries)". So there were 865 positive tests, out of 15,524 total.
 
