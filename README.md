@@ -8,16 +8,13 @@ These R lessons aim to teach participants with minimal programming experience th
 
 For the best experience, please have the following ready before the workshop begins:
 
-- Please sign up for a free RStudio Cloud account  [here](https://rstudio.cloud/). You can sign up/link to the Google account linked to your UW email if you do not want to create a separate username and password.
 - Install the latest version of [Google Chrome](https://www.google.com/chrome/) as some [older browsers](https://support.rstudio.com/hc/en-us/articles/227449447-Supported-browsers-for-RStudio-Connect) may not be compatible with the RStudio application.
-- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://forms.gle/G6HhAxsHeBXKJtkZ7).
+- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://forms.gle/2gMtVHCjJKUfpjEp7).
+- We will provide instructions on how to sign into our departmental instance of RStudio Server when we start.
 
 ## Accessing/interacting with the course content
 
-1. Course content will be pre-loaded into the RStudio Cloud instance, so we will cover how to access it at the beginning of the course
-2. The content is available at our [github page](https://github.com/pcmathias/dlmp-data-analysis-with-r) and can be downloaded from there as well.
-3. If you have a tablet you may find it useful to use that as a second screen: you work on your laptop to complete exercises and use your tablet to review the lesson slides that were just covered.
-4. This will be a virtual course. Please type questions into the Zoom chat and the instructor and/or a teaching assistant will answer in the chat or open a discussion with the group.
+The content is available at our [github page](https://github.com/pcmathias/dlmp-data-analysis-with-r). In preparation for each lesson we will download the exercise file we need and then transfer it to our RStudio Server to work with.
 
 ## Using the DLMP instance of RStudio Server
 
@@ -25,7 +22,7 @@ For clinical users in DLMP (e.g. staff, faculty, and trainees working with clini
 
 ## Installing RStudio onto your own computer
 
-We will be utilizing our cloud based RStudio instance in the workshop. You may want to install R and RStudio installed **on your own computer** in order to work on projects (though using the department-provided instance would be preferred, especially if you are working with protected health information). You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)). At each step, select the most recent version of R and RStudio available for your operating system (it may not match the versions installed in the videos but the steps will be the same).
+We will be utilizing our cloud based RStudio instance in the workshop. You may want to install R and RStudio installed **on your own computer** in order to work on projects (though using the department-provided instance would be preferred, especially if you are working with protected health information). You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)). At each step, select the most recent version of R and RStudio available for your operating system (it may not match the versions installed in the videos but the steps will be the same). Please be cognizant of how you manage sensitive data on your desktop or laptop.
 
 ## Acknowledgments
 
@@ -37,6 +34,7 @@ This course content was developed by the following people:
   * [Patrick Mathias](https://www.linkedin.com/in/pcmathias/)
   * Amrom Obstfeld
   * Joseph Rudolf
+  * Robert Benirschke
   
 The workshop also integrates content, best practices, and lessons from a variety of educators in the R community. We would like to specifically acknowledge: 
 
