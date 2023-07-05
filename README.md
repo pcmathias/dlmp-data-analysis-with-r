@@ -24,6 +24,10 @@ For clinical users in DLMP (e.g. staff, faculty, and trainees working with clini
 
 We will be utilizing our cloud based RStudio instance in the workshop. You may want to install R and RStudio installed **on your own computer** in order to work on projects (though using the department-provided instance would be preferred, especially if you are working with protected health information). You can find step by step instructions for installing these on macOS ([here](https://www.youtube.com/watch?v=GM88tYlEy_g)) or Windows ([here](https://www.youtube.com/watch?v=JRKmZK5-6aE)). At each step, select the most recent version of R and RStudio available for your operating system (it may not match the versions installed in the videos but the steps will be the same). Please be cognizant of how you manage sensitive data on your desktop or laptop.
 
+## Additional References
+
+The cheatsheets provided by Posit can be helpful quick references: [cheatsheet repository](https://github.com/rstudio/cheatsheets/tree/main). A few commonly used cheatsheets have been included in the pdfs directory of this repository. Note that these may not be the most recent versions available.
+
 ## Acknowledgments
 
 All of the course instructors have previous experience implementing and executing R workshops at a variety of venues. The workshop we are presenting for the API community is in many ways a product of these past experiences. 
