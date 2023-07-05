@@ -1,0 +1,156 @@
+---
+title: "Exercises for 04 - Group and Summarize"
+format: html
+editor: visual
+---
+
+## Setup Code Chunk
+
+Run this to reload your *chem* dataframe.
+
+```{r setup}
+## remove all user defined objects in your workspace
+rm(list=ls())
+
+library(tidyverse)  # Provides functions used throughout this session
+
+chem <- read_csv("data/chem_data.csv", 
+    col_types = cols(gender = col_factor(NULL),
+                     pregnancy_status_at_exam = col_factor(NULL),
+                     collect_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     receive_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     verify_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     pat_type = col_factor(NULL),
+                     payor_groups = col_factor(NULL),
+                     test = col_factor(NULL),
+                     units = col_factor(NULL))) # Read in data - note we determined data types up front
+```
+
+## Sequencing Analysis Steps Using the `|>`
+
+The pipe operator `|>` can make data analysis more efficient and readable by minimizing the number of times one might repeat a variable name and by separating out analysis steps line by line to make the sequence of operations clear. Consider the analysis below, where we are interested in identifying the observations with sodium measurements that had a longer turnaround time than 5 days.
+
+```{r}
+sodium_long_tat <- chem |> 
+  filter(test == "sodium") |> 
+  mutate(total_tat = verify_dt - collect_dt) |> 
+  filter(total_tat > days(5))
+```
+
+Note that the last line is dependent on the `mutate()` calculation of a new column in the second-to-last line. Observe what happens after running the code chunk when we use a `#` to comment out the mutate step:
+
+```{r}
+sodium_long_tat <- chem |> 
+  filter(test == "sodium") |> 
+  #mutate(total_tat = verify_dt - collect_dt) |> 
+  filter(total_tat > days(5))
+```
+
+What was the error?
+
+As a side note, comments can be helpful to include alongside code to help explain a variable or analysis step. Everything to the right of a `#` in a code chunk will be ignored by R, so you can comment out whole lines or place a comment directly to the right of your code.
+
+In the code chunk below, we are going to investigate outliers in the other direction - the tests that were resulted more quickly rather than slowly. We are also going to add another inclusion criteria - we are only interested in outpatient potassium results. Recall that inpatient, outpatient, etc. status is stored in the *pat_type* variable. Complete the code chunk below to identify outpatient potassium results with a total turnaround times of less than 3 days. Confirm that your new data frame has only the observations with the correct *test* and *pat_type* within the right TAT.
+
+```{r}
+potassium_short_tat <- chem |> 
+  filter(.........) |> 
+  
+  mutate(.........) |> 
+  filter(.........)
+View(potassium_short_tat)
+```
+
+**Stop Here**
+
+## Summarizing Variables
+
+The `summarize()` function generates a summary from multiple observations in a data set. The syntax for the function of similar to `mutate()`: you create a new column based on applying a function/calculation to multiple observations. In this case we use a new function `n()` that has a simple job of counting the number of observations in a data frame.
+
+```{r}
+chem |> 
+  filter(test == "sodium") |> 
+  summarize(sodium_count = n())
+```
+
+Like `mutate()` additional arguments can be added to `summarize()` to create more summary calculations across the dataframe. Here we are using a simple statistical function `median()` that is intended to calculate a median across a group of observations - when used with `summarize()` it will calculate the median across all the observations of a specified variable (*value* in this case). Note that we are not storing the output in another object but just showing it below the code chunk.
+
+```{r}
+chem |> 
+  filter(test == "sodium") |> 
+  summarize(sodium_count = n(),
+            median_sodium = median(value))
+```
+
+Let's calculate some additional statistics for the sodium values in our dataframe. In the code chunk below, in addition to the count and the median of the sodium values, create two new summary variables *mean_sodium* and *sd_sodium* that calculate the mean and standard deviation for the sodium values in the data set. Store the output in a new object *sodium_summary*. Keep track of the number of parentheses as you add additional summary variables - each function should have an open and closed parenthesis. The data transformation cheatsheet here might be useful: <https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf>.
+
+```{r}
+........ <- chem |> 
+  filter(test == "sodium") |> 
+  summarize(sodium_count = n(),
+            median_sodium = median(value))
+
+
+```
+
+**Stop Here**
+
+## Grouping and Summarizing
+
+The `group_by()` function creates groups within R but does not otherwise alter the output for the dataframe. R will create a group for each distinct value of the grouping variable. In this case, R recognizes that each of the rows that have the same *mrn* are part of the same group. By itself this behavior does not have an obvious benefit, but the subsets of the data that are created in the background are useful for follow-up calculations.
+
+```{r}
+chem |> 
+  group_by(mrn)
+```
+
+When `group_by()` is followed by `summarize()` we have a streamlined mechanism to create summaries of groups (i.e. subsets) of our data without manually separating the subsets from the data set. Here we are determining the number of observations (rows) in the dataframe for each distinct mrn.
+
+```{r}
+chem |> 
+  group_by(mrn) |> 
+  summarize(test_count = n())
+```
+
+In this particular dataframe, each individual has the same number of observations. (In case you are curious this data set is actually derived from publicly available National Health and Nutrition Examination Survey that has been linked with synthetic clinically related variable.) So this particular analysis is not so interesting, but you can imagine how this workflow could be helpful in a clinical setting where patients have varying numbers of tests.
+
+We now have all the tools to generate statistical summaries for all 24 tests in our *chem* dataframe. Let's create a new object *chem_summary* that groups the data by the *test* variable and creates a summary variables *mean_value*, *median_value*, and *sd_value* that calculate the mean, median, and standard deviation of the *value* variable, respectively, for each of the tests.
+
+```{r}
+
+
+
+
+
+View(chem_summary)
+```
+
+For analytes that we quantitate, we often define the reference range as the values that represent the middle 95 percent of a healthy population. If we assume our population is healthy, we can use this data to derive reference ranges for each of the analytes (tests). We briefly provided an example of the `quantile()` function which allows you to select the nth percentile across a number of observations. The `quantile()` function takes two arguments - the first is the variable (or collection of data) and the second argument is the percentile to calculate, expressed as a proportion. So if we want to calculate the 95th percentile of the variable *value* we would call the function `quantile(value, 0.95)`. In the code chunk below, add two variables *lower_limit* and *upper_limit* to your *chem_summary* object values of mean, median, and standard deviation for each of the tests. The *lower_limit* summary variable should be the 2.5th percentile and the *upper_limit* variable should be the 97.5th percentile value.
+
+```{r}
+chem_summary <- chem |> 
+  group_by(......) |> 
+  summarize(mean_value = ......,
+            median_value = .......,
+            sd_value = .......,
+            .......,
+            .......)
+View(chem_summary)
+```
+
+We may find that we want to create groups based on more than one variable. Additional variables are simply added as more arguments to `group_by()` (separated by commas, as always). We may be interested in comparing statistical summaries across different patient settings. Modify the analysis you did in the previous code chunk to add *pat_type* as an additional grouping variable and inspect the output.
+
+```{r}
+
+
+
+
+
+
+
+View(chem_summary)
+```
+
+As a final note, R preserves the groups that are created in the background. If you want to do additional data manipulation, grouping, and summarizing, you may want to use the `ungroup()` function to start with a clean slate.
+
+**Stop Here**
