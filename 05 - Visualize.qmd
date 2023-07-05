@@ -35,19 +35,19 @@ Our chemistry data set includes results for a number of analytes but we would li
 count(chem, test)
 ```
 
-Create an data frame *k_data* that includes only the potassium observations. Use the `summary()` function to review the potassium data.
+Create an data frame *k_data* that includes only the potassium observations. Use the `summary()` function to review the potassium dataframe you just created. View the dataframe in your RStudio viewer as well.
 
 ```{r}
 k_data <- chem |> 
-  filter(test == 'potassium')
-summary(k_data)
+  
+summary(......)
 ```
 
 Create a data frame *lyte_data* that includes observations from the electrolytes in a basic metabolic panel (sodium, potassium, chloride, bicarbonate). Recall that you can match on a list using the `%in%` operator and a list of items using the `c()` function: `variable %in% c('item1', 'item2')`. Review the contents of the lyte_data data frame to confirm that you have captured the results of interest.
 
 ```{r}
 lyte_data <- chem |> 
-  filter(test %in% c('sodium', 'potassium', 'chloride', 'bicarbonate'))
+  filter(...... %in% c(.......))
 View(lyte_data)
 ```
 
@@ -65,7 +65,7 @@ Does the plot fit the image you were expecting? Why or why not?
 
 ## The ggplot Template and Aesthetics
 
-Let's recreate the histogram of potassium results. 
+Let's recreate the histogram of potassium results.
 
 You will need to:
 
@@ -80,8 +80,15 @@ Fill in the blanks and run the code to create the plot.
 (Hint: if you get stuck, take a look at the slide titled "ggplot()"!)
 
 ```{r}
+#k_data <- chem |> # uncomment these lines if you do not have k_data in your environment
+#  filter(test == 'potassium')
 ggplot(data = ______) +
   ______(mapping = aes(x = ______))
+```
+
+```{r}
+ggplot(data = k_data) +
+  geom_histogram(mapping = aes(x = value), binwidth = 0.1)
 ```
 
 When you run this code, you will most likely have what looks like an error displayed above the graph:
@@ -92,18 +99,16 @@ This is actually just a message from R, telling you that it's a bad idea to use 
 
 The *value* variable holds the quantitative value a given test in this data set. For this specific analyte, what would be an appropriate binwidth for *value* to see a distribution aligned to the likely resolution of the measurements? (Visually inspect the data if you are less familiar with the range of typical potassium values.)
 
-Now fill in the blanks below to recreate the code from the previous chunk, with the \*binwidth\* argument passed to the \*geom_histogram\* function.
+Now fill in the blanks below to recreate the code from the previous chunk, with the *binwidth* argument passed to the *geom_histogram* function.
 
 ```{r}
 ggplot(______) +
   ______(mapping = aes(______), binwidth = ______)
 ```
 
-The effect of reducing the bin width (and increasing the number of bins) is that the data is now presented in much greater detail. 
-
+The effect of reducing the bin width (and increasing the number of bins) is that the data is now presented in much greater detail.
 
 Let's next add some color!
-
 
 Create a new code chunk below. Copy and paste the code from the previous code chunk and add an aesthetic mapping that maps the *fill* aesthetic to the *gender* variable. (Hint: all aesthetics must be defined \*inside\* the aes() function!)
 
@@ -132,7 +137,6 @@ Modify the previous code chunk so that the frequency polygon's line color is blu
 
 What do you think the following code will do? Try to predict what you'll see.
 
-
 Then run it.
 
 ```{r}
@@ -145,20 +149,36 @@ ggplot(data = k_data) +
 
 ## Faceting
 
+A grid of subplots can be produced using faceting functions, including `facet_grid()` which we demonstrate below. You can think about faceting like grouping the data frame - it is a convenient method to generate plots of subsets of data. The code chunk below takes our *k_data* dataframe and generates a series of histograms that are split into 2 rows by *gender* and 6 columns based on the *pat_type*, so that each individual plot represents the distribution of the intersection of those 2 variables.
+
+```{r}
+ggplot(data = k_data) +
+  geom_histogram(mapping = aes(x = value), binwidth = 0.1) +
+  facet_grid(rows = vars(gender), 
+		   cols = vars(pat_type),
+		   scales = "free")
+```
+
 Recall that we made a data frame that contains all of the electrolyte data *lyte_data* in the first exercise of this lesson. We would like to visualize the distribution of results in this data set by test and by patient gender. Build a faceted plot for the data frame that separates each gender group into separate rows and each test into separate columns. Use the `scales = "free"` argument to allow each column to use a different scale.
 
 ```{r}
-ggplot(data = lyte_data) +
-  geom_histogram(mapping = aes(x = value)) +
-  facet_grid(cols = vars(test), rows = vars(gender), scales = "free")
+#lyte_data <- chem |> # uncomment these lines if you do not have lyte_data in your environment
+#  filter(test %in% c('sodium', 'potassium', 'bicarbonate', 'chloride'))
+ggplot(data = ......) +
+  geom_histogram(mapping = aes(x = ......)) +
+  facet_grid(cols = vars(......), 
+             rows = vars(......), 
+             .......)
 ```
 
 The histogram shapes have some irregularities. Why might that be? How can you modify the plot to provide a better visualization? Consider that each of the analytes has a different measurement range. What option(s) for your geom function can you use to handle these disparate values?
 
 ```{r}
-ggplot(data = lyte_data) +
-  geom_histogram(mapping = aes(x = value), bins = 50) +
-  facet_grid(cols = vars(test), rows = vars(gender), scales = "free")
+ggplot(data = ......) +
+  geom_histogram(mapping = aes(x = ......), .......) +
+  facet_grid(cols = vars(......), 
+             rows = vars(......), 
+             .......)
 ```
 
 **Stop Here**
