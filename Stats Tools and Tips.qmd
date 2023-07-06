@@ -1,0 +1,99 @@
+---
+title: "Tips for Statistics Exercises"
+format: html
+editor: visual
+---
+
+## Importing and Cleaning Excel Files
+
+When you installed the *tidyverse* collection of packages you also downloaded a package called *readxl* that has functions built to read data from Excel files. The function `read_excel()` functions similarly to `read_csv()`: the first argument is a file name for an Excel file. However, unlike with csv files, Excel files may have multiple sheets that data could be pulled from. Another argument for the function is `sheet = "sheet_name"` which will direct R to the correct sheet to pull data from. Otherwise the function will default to pulling the first
+
+```{r}
+library(readxl)
+excel_data <- read_excel("excel_data_file.xls", sheet = "sheet_name")
+```
+
+More information about the function can be found at the [read_excel documentation page](https://readxl.tidyverse.org/reference/read_excel.html).
+
+Once you import the data you may need to do some cleaning of the imported data. I find the *janitor* package to be helpful for removing spaces from variable names as well as removing empty rows and columns. The [janitor vignettes](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html) show helpful examples of these functions, of which I show a few below.
+
+```{r}
+# install.packages("janitor") # install this once and then remove this code
+library(janitor)
+excel_data <- excel_data |> 
+  clean_names() # function to convert variable names to lower case and replace spaces with underscores
+excel_data <_ excel_data |> 
+  remove_empty(c("rows", "cols")) # remove empty rows and columns - be sure to inspect your data before and after doing this!
+```
+
+## Statistical Tests in R
+
+Base R has a wide variety of statistics functions that often do not make assumptions about tidy data. For example, to perform a two sample t.test one would use the following syntax:
+
+```{r}
+t.test(distribution_1 ~ distribution_2, data = excel_data)
+```
+
+where the dataframe is *excel_data* and *distribution_1* and *distribution_2* each represent a variable in that dataframe. (Note that we would normally have independent observations or rows in a tidy data set, but for this example there are 2 observations per row, each represented in a separate variable.)
+
+For questions in which we are asking "are these observations from the same population?" there are a number of tests to consider - it's important to understand the underlying distribution of the data, which often boils down to visualizing a distribution of the data. You can use a histogram to do this:
+
+```{r}
+ggplot(data = excel_data) +
+  geom_histogram(x = distribution_1)
+```
+
+In addition to visualizing the data you can perform a formal test of normality such as a Shapiro-Wilk test of a single variable:
+
+```{r}
+shapiro.test(excel_data$distribution_1) # the $ are a base R way of referencing a variable within a dataframe - some base R functions do not allow you to specify the data frame separately so instead you have to call out the dataframe and variable together
+```
+
+A p-value greater than 0.05 suggests that the distribution is not significantly different from a normal distribution.
+
+When you determine whether the data is normally distributed or not, you then can determine whether to use parametric tests or non-parametric tests.
+
+The t-test described above compares 2 samples. When you have more than 2 samples you can use ANOVA, for which there is a nice tutorial [here](https://statsandr.com/blog/anova-in-r/).
+
+If the data are not normally distributed you will need to use non-parametric tests. The Mann-Whitney U Test (or Wilcoxon rank-sum) is used when comparing 2 samples:
+
+```{r}
+wilcox.test(excel_data$distribution_1, excel_data$distribution_2)
+```
+
+If you are comparing many samples/populations, then the Kruskal-Wallis test would probably be the non-parametric approach to take. There is a good tutorial [here](https://www.r-bloggers.com/2022/05/how-to-perform-the-kruskal-wallis-test-in-r/).
+
+## Calculating Statistics
+
+In the R lessons we covered using `summarize()` to perform a calculation across a variable. This is very straightforward for simple statistical calculations such as mean, median, mode, and standard deviation.
+
+```{r}
+excel_data |> 
+  summarize(mean_dist_1 = mean(distribution_1),
+            median_dist_1 = median(distribution_1),
+            mode_dist_1 = mode(distribution_1),
+            sd_dist_1 = sd(distrubtion_1))
+```
+
+More advanced calculations such as skew and kurtosis are not built into base R, but are included in the *moments* package.
+
+```{r}
+# install.packages("moments") # install this once and then remove this code
+library(moments)
+skewness(excel_data$distrubtion_1)
+kurtosis(excel_data$distribution_1)
+```
+
+## Method Comparison
+
+Comparing methods is a common activity in laboratory medicine which often relies on scatterplots for visualization plus regression to quantify the relationship between two methods. Roche, one of the large in vitro diagnostics vendors, has made available an R package called *mcr* to help with these analyses. The `mcreg()` function is the main function in the package. You supply the function at least 2 arguments - the first (x) is the reference method (if applicable) and the second is the test method to compare against. The *method.reg* argument is important in specifying the type of regression to perform: Passing Bablok, ordinary least squares regression, Deming regression, and others are available.
+
+```{r}
+# install.packages("mcr") # install this once and then remove this code
+library(mcr)
+?mcreg # take a look at the help documentation
+mcreg(x = excel_data$distribution1, y = excel_data$distribution_2,
+      method.reg = "Deming") # performs a Deming regression
+```
+
+The full documentation for the package can be found [here](https://cran.r-project.org/web/packages/mcr/mcr.pdf).
