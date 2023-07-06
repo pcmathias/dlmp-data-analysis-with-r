@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-## Importing COVID19 data from a CSV file
+## Importing Data from a CSV File
 
 Take a look at the *Files* pane on the bottom right. In the previous Your Turn you added the *chem_data.csv* file to the *data* folder you created. The objective of this exercise is to *import* that CSV file into R as a data frame, and then take a first look at its contents using the *Data Viewer*.
 
@@ -21,7 +21,7 @@ chem <- read_csv("data/chem_data.csv")
 
 Hint: click on the green triangle in the upper right corner of the code chunk!
 
-## Inspecting a data frame
+## Inspecting a Data Frame
 
 One thing that Excel does well is to provide an interactive visual representation of the data. This allows you to inspect it by sorting and filtering. RStudio actually does this well, too, with one difference - it won't let you *change* any of the data while you inspect it.
 
