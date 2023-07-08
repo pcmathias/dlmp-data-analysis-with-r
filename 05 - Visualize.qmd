@@ -86,11 +86,6 @@ ggplot(data = ______) +
   ______(mapping = aes(x = ______))
 ```
 
-```{r}
-ggplot(data = k_data) +
-  geom_histogram(mapping = aes(x = value), binwidth = 0.1)
-```
-
 When you run this code, you will most likely have what looks like an error displayed above the graph:
 
 \`stat_bin()\` using \`bins = 30\`. Pick better value with \`binwidth\`.
