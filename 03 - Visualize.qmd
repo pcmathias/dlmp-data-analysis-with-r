@@ -1,12 +1,12 @@
 ---
-title: "Exercises for 05 - Visualize"
+title: "Exercises for 03 - Visualize"
 format: html
 editor: visual
 ---
 
 ## Setup Code Chunk
 
-Run this to reload your *chem* dataframe.
+Run this to reload your *chem* dataframe and set up the additional data sets we will use in the exercises.
 
 ```{r setup}
 ## remove all user defined objects in your workspace
@@ -24,31 +24,12 @@ chem <- read_csv("data/chem_data.csv",
                      payor_groups = col_factor(NULL),
                      test = col_factor(NULL),
                      units = col_factor(NULL))) # Read in data - note we determined data types up front
-```
-
-## Refresher on Data Manipulation
-
-Our chemistry data set includes results for a number of analytes but we would like to focus on a subset of the data for this lesson. You will want to create a subset of the the data based on the *test* variable so we are going to start by using the `count()` function will do a group by and summarize to count the number of rows for a given variable(s). This can be a quick way to see the observations if your variable is represented as text and not a factor.
-
-```{r}
-# get a summary of the various tests included in the data frame
-count(chem, test)
-```
-
-Create an data frame *k_data* that includes only the potassium observations. Use the `summary()` function to review the potassium dataframe you just created. View the dataframe in your RStudio viewer as well.
-
-```{r}
+# the code below prepares a data set that contains only potassium values
 k_data <- chem |> 
-  
-summary(......)
-```
-
-Create a data frame *lyte_data* that includes observations from the electrolytes in a basic metabolic panel (sodium, potassium, chloride, bicarbonate). Recall that you can match on a list using the `%in%` operator and a list of items using the `c()` function: `variable %in% c('item1', 'item2')`. Review the contents of the lyte_data data frame to confirm that you have captured the results of interest.
-
-```{r}
+  filter(test == 'potassium')
+# the code below prepares a data set that contains electrolytes commonly assayed in a metabolic panel
 lyte_data <- chem |> 
-  filter(...... %in% c(.......))
-View(lyte_data)
+  filter(test %in% c('sodium', 'potassium', 'chloride', 'bicarbonate'))
 ```
 
 **Stop Here**
@@ -154,7 +135,7 @@ ggplot(data = k_data) +
 		   scales = "free")
 ```
 
-Recall that we made a data frame that contains all of the electrolyte data *lyte_data* in the first exercise of this lesson. We would like to visualize the distribution of results in this data set by test and by patient gender. Build a faceted plot for the data frame that separates each gender group into separate rows and each test into separate columns. Use the `scales = "free"` argument to allow each column to use a different scale.
+Recall that in our setup chunk we made a data frame that contains all of the electrolyte data *lyte_data*. We would like to visualize the distribution of results in this data set by test and by patient gender. Build a faceted plot for the data frame that separates each gender group into separate rows and each test into separate columns. Use the `scales = "free"` argument to allow each column to use a different scale.
 
 ```{r}
 #lyte_data <- chem |> # uncomment these lines if you do not have lyte_data in your environment
