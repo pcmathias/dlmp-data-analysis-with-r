@@ -1,0 +1,118 @@
+---
+title: "06 - Stats Solutions"
+format: html
+editor: visual
+---
+
+## Setup Code Chunk
+
+Run this to reload your *chem* dataframe.
+
+```{r}
+## remove all user defined objects in your workspace
+rm(list=ls())
+
+library(tidyverse)  # Provides functions used throughout this session
+library(infer) # Provides statistical tests compatible with tidyverse
+
+chem <- read_csv("data/chem_data.csv", 
+    col_types = cols(gender = col_factor(NULL),
+                     pregnancy_status_at_exam = col_factor(NULL),
+                     collect_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     receive_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     verify_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     pat_type = col_factor(NULL),
+                     payor_groups = col_factor(NULL),
+                     test = col_factor(NULL),
+                     units = col_factor(NULL))) # Read in data - note we determined data types up front
+```
+
+## Statistical Tests \| 1-sample t-test
+
+To run common statistical tests, we can use the 'infer' package, which is part of tidyverse. To run tests, we first filter down to our desired data subset. We can then run common tests on this using simple commands
+
+```{r}
+# We can test whether outpatient cholesterol levels are similar to the US adult average (~190ng/mL)
+# First limit to the cholesterol test, and outpatients
+chol_subset <- filter(chem, test == 'cholesterol', pat_type == 'outpatient')
+
+# We can quickly print the mean value, to see if its close
+print(mean(chol_subset$value))
+
+# Now we can run a 1-sample t-test
+t_test(chol_subset, response = value, mu = 190)
+```
+
+The output from the t-test gives us a value for the t-statistic, the p-value for the test, and a 95% CI on what the mean value is.
+
+## Statistical Tests \| 2-sample t-test
+
+```{r}
+# For a 2-sample test, let's estimate whether iron levels are different for male and female outpatients
+# First limit to the iron test, and outpatients
+iron_subset <- filter(chem, test == 'iron', pat_type == 'outpatient')
+
+# Now we can run a 2-sample t-test
+t_test(iron_subset, response =  value, explanatory = gender, order = c("Female", "Male"))
+```
+
+## Statistical Tests \| T-test exercises
+
+Write code to answer the following questions:
+
+1.  Do glucose levels differ between inpatients and outpatients?
+
+    First create the desired data subset, then run the t-test
+
+    ```{r}
+
+      glu_subset <- filter(chem, test == 'glucose', 
+                           pat_type %in% c('inpatient', 'outpatient'))
+      
+      t_test(glu_subset, response = value, explanatory = pat_type,
+             order = c('inpatient', 'outpatient'))
+    ```
+
+2.  Does the average age of men and women who get outpatient iron tests differ?
+
+```{r}
+
+  outpt_iron_subset <- filter(chem, test == 'iron', pat_type == 'outpatient')
+  
+  t_test(outpt_iron_subset, response = age, explanatory = gender,
+         order = c('Male', 'Female'))
+```
+
+**Stop Here**
+
+## Statistical Tests \| Chi-squared test
+
+```{r}
+# For a chi-squared let's estimate whether male and female outpatients have
+# different rates of low iron (<32)
+
+# First limit to the iron test, and outpatients
+iron_subset <- filter(chem, test == 'iron', pat_type == 'outpatient')
+# Now we construct a binary outcome variable, for whether iron is low
+iron_subset <- iron_subset |> mutate(iron_binary = (value < 32))
+
+# Now we run the test using this outcome, with gender as the group
+chisq_test(iron_subset, iron_binary ~ gender)
+
+```
+
+## Statistical Tests \| Chi-squared Exercises
+
+## Write code to answer the following questions:
+
+Is the gender split different for different patient types?
+
+```{r}
+  # Convert gender to a binary variable
+  chem <- chem |>
+    mutate(gender_binary = if_else(gender == 'Male', TRUE, FALSE))
+  
+  chisq_test(chem, gender_binary ~ pat_type)
+```
+
+**Stop Here**
