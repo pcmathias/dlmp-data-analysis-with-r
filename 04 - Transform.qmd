@@ -1,5 +1,5 @@
 ---
-title: "Exercises for 03 - Transform"
+title: "Exercises for 04 - Transform"
 format: html
 editor: visual
 ---
@@ -105,3 +105,13 @@ View(chem)
 ```
 
 **Stop Here**
+
+## A Different Type of Transformation
+
+The data set have been working with has been tidy: each row includes a distinct observation of a test value. However, there may be some cases in which we would like to perform mathematical observations or comparisons between distinct lab values. For example, we may want to calculate an anion gap based on chemistry values. In its current state we can't easily use mutate to do that calculation because we'd need perform calculation between rows for the same patient. However, we could transform the data in a way that aligns multiple values for a patient on a single row, with each distinct value appearing in a different variable. We are proposing the transformation of a "long" or "tall" data set into a "wide" data set.
+
+This seems to be a good task for an LLM to help us with. Consult Chatbot to help perform this operation. After you have the right data structure, create a new anion_gap variable and perform this calculation. Recall that the anion gap is calculated as the sum of the cations sodium and potassium, with the cations chloride and bicarbonate subtracted from them: (Na + K) - (Cl + HCO3).
+
+```{r}
+
+```

@@ -158,3 +158,23 @@ ggplot(data = ......) +
 ```
 
 **Stop Here**
+
+## Asking AI for Help
+
+Large language models (LLMs) such as ChatGPT have been trained with a large number of problems and code on the internet. They can help you discover new functions and find the solution to a problem quickly but you will arrive at the solution much more quickly if provide clear explanations of what you are trying to accomplish using clear vocabulary and concepts we cover in these sessions.
+
+Tips for effective use of LLM tools:
+
+-   Clearly describe the data set you are working with names for the relevant components. This can be more straightforward if you are working with tidy data, including data frames that are built with variables as columns and single observations in each row.
+
+-   If the data set is not tidy but you'd like or need it to be, or if your primary goal is to transform the data (will be covered in more detail in the next lessons), clearly describe how the data looks at the beginning and how you'd like it to look at the end, with clear descriptions of what is in each cell, column, and row.
+
+-   Apply computational thinking - try to break down the problem into multiple steps and prompt for solutions at each step, then verify the output of the code at every step. If you see something wrong or unexpected, you can provide that feedback clearly to the LLM and it will adjust its answer to adjust the output and fix the problem.
+
+-   In these lessons we are working with tidy data and using packages from the tidyverse group of packages, which is built on standard assumptions of how functions are written. There are many solutions to problems in "base" R that do not use tidyverse functions but these may be harder to read or understand, especially as your are first learning. Asking for solutions that use tidyverse packages explicitly may be helpful. This may happen by default if you describe your data set in terms of observations and variables, but if it doesn't, you can always explicitly ask for a different solution.
+
+For most of the lesson we focused on plotting the distribution of a single variable, though with faceting we learned how to add another variable and create separate plots to show distributions that are subset by one or more variables. Let's do this within a single plot with the help of a large language model. Using the DLMP Chatbot, ask for help visualizing the distributions of our potassium data split by another variable (e.g. sex or pat_type) using at least 2 different types of plots, within a single plot (i.e. not faceting).
+
+```{r}
+
+```
