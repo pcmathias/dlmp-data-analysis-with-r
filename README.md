@@ -9,7 +9,7 @@ These R lessons aim to teach participants with minimal programming experience th
 For the best experience, please have the following ready before the workshop begins:
 
 - Install the latest version of [Google Chrome](https://www.google.com/chrome/) as some [older browsers](https://support.rstudio.com/hc/en-us/articles/227449447-Supported-browsers-for-RStudio-Connect) may not be compatible with the RStudio application.
-- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://forms.gle/2gMtVHCjJKUfpjEp7).
+- Please complete the following survey so we can better understand your R experience and what you want out of the course: [DLMP R Pre-Lesson Survey](https://docs.google.com/forms/d/e/1FAIpQLSexy5C5Umsi21ilZA249RvrPEfrHSJb-ibmjHAq_GuHkpHxOg/viewform?usp=sharing&ouid=100990889910002882254).
 - We will provide instructions on how to sign into our departmental instance of RStudio Server when we start.
 
 ## Accessing/interacting with the course content
@@ -39,6 +39,7 @@ This course content was developed by the following people:
   * Amrom Obstfeld
   * Joseph Rudolf
   * Robert Benirschke
+  * Michelle Stoffel (data request content)
   
 The workshop also integrates content, best practices, and lessons from a variety of educators in the R community. We would like to specifically acknowledge: 
 
