@@ -1,0 +1,117 @@
+---
+title: "Exercises for 04 - Transform"
+format: html
+editor: visual
+---
+
+## Using a Setup Code Chunk
+
+Whenever we start a notebook-style document, we often know ahead of time about specific packages we will use and data sets we would like to import. You can use your first code chunk as a "setup" chunk to take care of the housekeeping up front and make your analysis a little easier to follow.
+
+Go ahead an run this chunk below to load the tidyverse package we will need as well as to load our chemistry data set.
+
+```{r setup}
+## remove all user defined objects in your workspace
+rm(list=ls())
+
+library(tidyverse)  # Provides functions used throughout this session
+
+chem <- read_csv("data/chem_data.csv", 
+    col_types = cols(gender = col_factor(NULL),
+                     pregnancy_status_at_exam = col_factor(NULL),
+                     collect_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     receive_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     verify_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     pat_type = col_factor(NULL),
+                     payor_groups = col_factor(NULL),
+                     test = col_factor(NULL),
+                     units = col_factor(NULL))) # Read in data - note we determined data types up front
+```
+
+To start from a clean slate, we ran a function to clear our environment. It's a good practice to clear your environment with each analysis session and then re-run your analysis sequentially. If you run code chunks out of sequence you may produce output that doesn't match when the code is run sequentially and therefore is less reproducible.
+
+How can you confirm that you have successfully loaded the data file into Rstudio?
+
+1.  The code that imported the data did not yield an error
+
+2.  Code that references *chem* object runs without errors
+
+3.  The *chem* object is present in the environment pane
+
+**Stop Here**
+
+## Creating a Subset Using `filter()`
+
+Recall that we can select a subset of observations for a single patient using `filter()`:
+
+```{r}
+filter(chem, mrn == 111900)
+```
+
+Multiple criteria can be applied to a data set by adding them as arguments to the `filter()` function - logically, this applies an *AND* to each criteria (as opposed to an *OR*:
+
+```{r}
+filter(chem, age >= 50, gender == "Female")
+```
+
+You want to confirm a reference interval for women over 50 for alkaline phophatase. Let's start by creating a subset of the data that only contains alkaline phosphatase observations and storing the output in a data frame named *alk_phos*. Replace the placeholders in the code below.
+
+```{r}
+alk_phos <- filter(...., ..........)
+```
+
+Find every alkaline phosphatase test for female patients aged 50 and over. The column in which age is found is named *age*, gender is found in *gender* and test is in *test*. Recall that multiple conditions be included as arguments to `filter()`, and all of them will be applied (e.g. `filter(data_set, variable1 == "value", variable2 >= value, variable3 == "value")`). Assign the new data frame to the object *alk_phos_f*. (Note: you can start with the original *chem* dataframe that you imported, or you can apply logical criteria to the *alk_phos* dataframe you created in the step above. You should get the same output either way.)
+
+```{r}
+
+```
+
+Now we would only like to include outpatients from the object you just created. Find all of the alkaline phosphtase testing in female patients 50 and over where the patient type (*pat_type*) is equal to "outpatient". Assign the new data frame to the object *outpt_alk_phos_f*.
+
+```{r}
+
+```
+
+We may have some data anomalies in the data set. Find all of the biochemistry testing where the patient class (column *pat_type*) is not entered. In these cases the value will be NA. NA stands for "not available". It is the way that R codes missing values. \[Hint: See slide titled "Logical Tests"\]
+
+```{r}
+
+```
+
+**Stop Here**
+
+## Creating a New Column
+
+The `mutate()` function is used to add one or more variables to a dataframe, based on calculations applied to other columns. For example, we can create a new variable *in_lab_tat* (tat = turnaround time) based on the difference between the *verify_dt* (when the result from test was verified and released) and the *receive_dt* (when the sample was received in the lab).
+
+```{r}
+chem <- mutate(chem, in_lab_tat = verify_dt - receive_dt)
+head(chem) # function to show the first few observations
+# click the right arrow until you get to the rightmost variables to see the new variable
+```
+
+Use the code chunk below to create a new variable *total_tat* in your *chem* dataframe that captures the entire turnaround time from *collect_dt* to *verify_dt*. Inspect the dataframe afterwards and confirm that your new variable was created. Is there anything different about this turnaround time columns compared to the others?
+
+```{r}
+
+View(chem)
+```
+
+When you subtract two timestamps, R preserves the fact that the operation was a difference in times and stores the result as a data type called a *difftime*. This can be helpful from the perspective that the output is human readable and understandable, but we may also want a plain number to perform calculations on or to plot. We can apply a function `as.numeric()` to convert a value that R recognizes as parseable into a number. In this case, we also need instruct R on which units to use when it converts the values to a number. We can apply a `units = "min"` argument to instruct R that we want the numeric output to capture the time differences in minutes: `as.numeric(variable, units = "mins")`. In the code chunk below create a new variable *total_tat_min* to represent the total turnaround times in minutes as a numeric variable. Confirm the creation and format of your new variable when you are done.
+
+```{r}
+
+View(chem)
+```
+
+**Stop Here**
+
+## A Different Type of Transformation
+
+The data set have been working with has been tidy: each row includes a distinct observation of a test value. However, there may be some cases in which we would like to perform mathematical observations or comparisons between distinct lab values. For example, we may want to calculate an anion gap based on chemistry values. In its current state we can't easily use mutate to do that calculation because we'd need perform calculation between rows for the same patient. However, we could transform the data in a way that aligns multiple values for a patient on a single row, with each distinct value appearing in a different variable. We are proposing the transformation of a "long" or "tall" data set into a "wide" data set.
+
+This seems to be a good task for an LLM to help us with. Consult Chatbot to help perform this operation. After you have the right data structure, create a new anion_gap variable and perform this calculation. Recall that the anion gap is calculated as the sum of the cations sodium and potassium, with the cations chloride and bicarbonate subtracted from them: (Na + K) - (Cl + HCO3).
+
+```{r}
+
+```

@@ -1,0 +1,180 @@
+---
+title: "Exercises for 03 - Visualize"
+format: html
+editor: visual
+---
+
+## Setup Code Chunk
+
+Run this to reload your *chem* dataframe and set up the additional data sets we will use in the exercises.
+
+```{r setup}
+## remove all user defined objects in your workspace
+rm(list=ls())
+
+library(tidyverse)  # Provides functions used throughout this session
+
+chem <- read_csv("data/chem_data.csv", 
+    col_types = cols(gender = col_factor(NULL),
+                     pregnancy_status_at_exam = col_factor(NULL),
+                     collect_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     receive_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     verify_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     pat_type = col_factor(NULL),
+                     payor_groups = col_factor(NULL),
+                     test = col_factor(NULL),
+                     units = col_factor(NULL))) # Read in data - note we determined data types up front
+# the code below prepares a data set that contains only potassium values
+k_data <- chem |> 
+  filter(test == 'potassium')
+# the code below prepares a data set that contains electrolytes commonly assayed in a metabolic panel
+lyte_data <- chem |> 
+  filter(test %in% c('sodium', 'potassium', 'chloride', 'bicarbonate'))
+```
+
+**Stop Here**
+
+## Creating a ggplot
+
+```{r}
+
+```
+
+Does the plot fit the image you were expecting? Why or why not?
+
+**Stop Here**
+
+## The ggplot Template and Aesthetics
+
+Let's recreate the histogram of potassium results.
+
+You will need to:
+
+1.  Pick a data set: *k_data*
+
+2.  Choose a geom function: `geom_histogram()`
+
+3.  Map aesthetic properties of the graph to variables of the data frame (in this case, the *value* variable should be on the x axis).
+
+Fill in the blanks and run the code to create the plot.
+
+(Hint: if you get stuck, take a look at the slide titled "ggplot()"!)
+
+```{r}
+#k_data <- chem |> # uncomment these lines if you do not have k_data in your environment
+#  filter(test == 'potassium')
+ggplot(data = ______) +
+  ______(mapping = aes(x = ______))
+```
+
+When you run this code, you will most likely have what looks like an error displayed above the graph:
+
+\`stat_bin()\` using \`bins = 30\`. Pick better value with \`binwidth\`.
+
+This is actually just a message from R, telling you that it's a bad idea to use a default bin width.
+
+The *value* variable holds the quantitative value a given test in this data set. For this specific analyte, what would be an appropriate binwidth for *value* to see a distribution aligned to the likely resolution of the measurements? (Visually inspect the data if you are less familiar with the range of typical potassium values.)
+
+Now fill in the blanks below to recreate the code from the previous chunk, with the *binwidth* argument passed to the *geom_histogram* function.
+
+```{r}
+ggplot(______) +
+  ______(mapping = aes(______), binwidth = ______)
+```
+
+The effect of reducing the bin width (and increasing the number of bins) is that the data is now presented in much greater detail.
+
+Let's next add some color!
+
+Create a new code chunk below. Copy and paste the code from the previous code chunk and add an aesthetic mapping that maps the *fill* aesthetic to the *gender* variable. (Hint: all aesthetics must be defined \*inside\* the aes() function!)
+
+**Stop Here**
+
+## Geom Functions
+
+Run the following code chunk:
+
+```{r}
+ggplot(data = k_data) +
+  geom_histogram(mapping = aes(x = value), binwidth = 0.1)
+```
+
+Now try to figure out how you would modify the code above so it draws a frequency polygon instead of histogram. One resource is the ggplot cheatsheet that can be found at <https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf>
+
+```{r}
+
+```
+
+Modify the previous code chunk so that the frequency polygon's line color is blue. (Hint: color names go in quotes!)
+
+```{r}
+
+```
+
+What do you think the following code will do? Try to predict what you'll see.
+
+Then run it.
+
+```{r}
+ggplot(data = k_data) +
+  geom_histogram(mapping = aes(x = value), binwidth = 0.1) +
+  geom_freqpoly(mapping = aes(x = value), binwidth = 0.1)
+```
+
+**Stop Here**
+
+## Faceting
+
+A grid of subplots can be produced using faceting functions, including `facet_grid()` which we demonstrate below. You can think about faceting like grouping the data frame - it is a convenient method to generate plots of subsets of data. The code chunk below takes our *k_data* dataframe and generates a series of histograms that are split into 2 rows by *gender* and 6 columns based on the *pat_type*, so that each individual plot represents the distribution of the intersection of those 2 variables.
+
+```{r}
+ggplot(data = k_data) +
+  geom_histogram(mapping = aes(x = value), binwidth = 0.1) +
+  facet_grid(rows = vars(gender), 
+		   cols = vars(pat_type),
+		   scales = "free")
+```
+
+Recall that in our setup chunk we made a data frame that contains all of the electrolyte data *lyte_data*. We would like to visualize the distribution of results in this data set by test and by patient gender. Build a faceted plot for the data frame that separates each gender group into separate rows and each test into separate columns. Use the `scales = "free"` argument to allow each column to use a different scale.
+
+```{r}
+#lyte_data <- chem |> # uncomment these lines if you do not have lyte_data in your environment
+#  filter(test %in% c('sodium', 'potassium', 'bicarbonate', 'chloride'))
+ggplot(data = ......) +
+  geom_histogram(mapping = aes(x = ......)) +
+  facet_grid(cols = vars(......), 
+             rows = vars(......), 
+             .......)
+```
+
+The histogram shapes have some irregularities. Why might that be? How can you modify the plot to provide a better visualization? Consider that each of the analytes has a different measurement range. What option(s) for your geom function can you use to handle these disparate values?
+
+```{r}
+ggplot(data = ......) +
+  geom_histogram(mapping = aes(x = ......), .......) +
+  facet_grid(cols = vars(......), 
+             rows = vars(......), 
+             .......)
+```
+
+**Stop Here**
+
+## Asking AI for Help
+
+Large language models (LLMs) such as ChatGPT have been trained with a large number of problems and code on the internet. They can help you discover new functions and find the solution to a problem quickly but you will arrive at the solution much more quickly if provide clear explanations of what you are trying to accomplish using clear vocabulary and concepts we cover in these sessions.
+
+Tips for effective use of LLM tools:
+
+-   Clearly describe the data set you are working with names for the relevant components. This can be more straightforward if you are working with tidy data, including data frames that are built with variables as columns and single observations in each row.
+
+-   If the data set is not tidy but you'd like or need it to be, or if your primary goal is to transform the data (will be covered in more detail in the next lessons), clearly describe how the data looks at the beginning and how you'd like it to look at the end, with clear descriptions of what is in each cell, column, and row.
+
+-   Apply computational thinking - try to break down the problem into multiple steps and prompt for solutions at each step, then verify the output of the code at every step. If you see something wrong or unexpected, you can provide that feedback clearly to the LLM and it will adjust its answer to adjust the output and fix the problem.
+
+-   In these lessons we are working with tidy data and using packages from the tidyverse group of packages, which is built on standard assumptions of how functions are written. There are many solutions to problems in "base" R that do not use tidyverse functions but these may be harder to read or understand, especially as your are first learning. Asking for solutions that use tidyverse packages explicitly may be helpful. This may happen by default if you describe your data set in terms of observations and variables, but if it doesn't, you can always explicitly ask for a different solution.
+
+For most of the lesson we focused on plotting the distribution of a single variable, though with faceting we learned how to add another variable and create separate plots to show distributions that are subset by one or more variables. Let's do this within a single plot with the help of a large language model. Using the DLMP Chatbot, ask for help visualizing the distributions of our potassium data split by another variable (e.g. sex or pat_type) using at least 2 different types of plots, within a single plot (i.e. not faceting).
+
+```{r}
+
+```

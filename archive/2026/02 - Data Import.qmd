@@ -1,0 +1,109 @@
+---
+title: "Exercises for 02 - Data Import"
+format: html
+editor: visual
+---
+
+## Importing Data from a CSV File
+
+Take a look at the *Files* pane on the bottom right. In the previous Your Turn you added the *chem_data.csv* file to the *data* folder you created. The objective of this exercise is to *import* that CSV file into R as a data frame, and then take a first look at its contents using the *Data Viewer*.
+
+Recall that to import CSV files, we use the *read_csv()* function, which is part of the *tidyverse* package. The *read_csv()* function takes a *filename* as an argument and returns a *data frame*. To capture the data frame in a named object, we use the *assignment operator* ( \<- ).
+
+In the following code chunk, we first load the *tidyverse* package and then use the *read_csv()* function to load the *chem_data.csv* file and capture it in an object named *chem*. Note that the *02 - Data Import.qmd* file is in the *core* directory so we have to provide the *data/* path to point the *read_csv* function to the right location for our file. This step is very important if you follow the best practice of segregating your raw data in a different location from your analysis and output files.
+
+Run the following code chunk.
+
+```{r, message = FALSE}
+library(tidyverse)
+chem <- read_csv("data/chem_data.csv")
+```
+
+Hint: click on the green triangle in the upper right corner of the code chunk!
+
+## Inspecting a Data Frame
+
+One thing that Excel does well is to provide an interactive visual representation of the data. This allows you to inspect it by sorting and filtering. RStudio actually does this well, too, with one difference - it won't let you *change* any of the data while you inspect it.
+
+Look on the right at the *Environment* pane (you might have to click on the "Environment" tab) and find the entry *chem*. This is the data frame you just created inside of R's memory. (If you don't see *chem*, try running the code chunk above again).
+
+On the far right next to *chem*, you will spot a symbol that looks like a small table. Click on it to make the *Data Viewer* appear.
+
+Without writing any code, just by working with the Data Viewer, try to answer the following questions:
+
+1.  How many rows are in the data frame? How many columns?
+
+2.  Go ahead and try to edit one of the values in this viewer. You will find that you can't. It would have been easy for the RStudio programmers to allow editing of specific values, but they decided not to add that feature. Why do you think this was designed that way?
+
+3.  Each row in *chem* represents a single result from a chemistry test. The value in the *test* column indicates the specific test performed and the value column contains the patient result for that test. What is the largest numerical value in the data set? What is the smallest?
+
+4.  How many results are available for patients who are 50 and older? Of those patients 50 and older, how many albumin results are available? (Hint: look at the Filter button)
+
+When you are done, put your sticky note up.
+
+**Stop Here**
+
+## Modifying Data Types
+
+Functions that import data in R make assumptions of how the data needs to be represented, typically based on scanning a limited number of rows and "guessing" what data type will fit best. At high level, R is often looking for numbers vs. characters and will default to defining a variable as a character. The data type for each variable impacts how R interprets and displays the values in your data frame. Let's take a look at the data set we imported using the `summary()` function, which is a quick mechanism to generate simple statistical summaries.
+
+```{r}
+summary(chem)
+```
+
+You'll notice that `summary()` produces a nice output for the variables with a numeric data type. But there are a large number of variables that have been imported as characters and we aren't able to glean useful information from.
+
+You can imagine how this behavior of converting all variables where characters (i.e. strings) make up some observations might be problematic if we have a variable for which most of the observations are numbers but occasionally the field is text instead. As a concrete example, most laboratory results for an analyte like sodium will be numeric but if we cancel and credit the test there may be a comment entered in place of a numeric value. Most import functions will import that variable as a character rather than a numeric data type.
+
+It would be helpful to instruct R specifically how which data type each variable should be mapped to. We can add additional arguments to our `read_csv()` function to define the necessary column types. In the code chunk below we are going to create a new object *chem_data* that imports our same *chem_data.csv* file using the `read_csv()` function but we have added a *col_types* argument to convert the *pregnancy_status_at_exam* and *pat_type* variables to factors and the *collect_dt* variable to a data type that recognizes both date and time.
+
+The general format for applying the *col_types* argument is that we call a `cols()` function with a format of `cols(variable_name = col_data_type(arguments)`.
+
+Run the code chunk below and inspect the output.
+
+```{r}
+chem_data <- read_csv("data/chem_data.csv", 
+    col_types = cols(pregnancy_status_at_exam = col_factor(NULL), 
+        collect_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+        pat_type = col_factor(NULL)))
+summary(chem_data)
+```
+
+The output for the variables we converted to factors and datetimes is now much more descriptive. To convert *collect_dt* into a datetime data type, we specified the format of the original character string that was imported. The key for what each symbol (e.g. "%Y" = 4 digit year) can be found here: <https://readr.tidyverse.org/reference/parse_datetime.html>.
+
+Which other variables would it make sense to convert to different data types? As a rule of thumb, uniquely identifiable observations (e.g. MRNs, names) probably don't make sense to be expressed as a factor but categorical variables where there is value to reviewing breakdowns across a population (e.g. gender, sex, race, ethnicity) likely do make sense to convert into a factor.
+
+In the code chunk below, specify new data types for additional variables and rebuild the object *chem_data* with the most appropriate data types for each of the variables (don't worry about coercing the variable's data type if is already appropriate. Note that the order in which you list the arguments to the `cols()` function does not matter.
+
+```{r}
+chem_data <- read_csv("data/chem_data.csv", 
+    col_types = cols(pregnancy_status_at_exam = col_factor(NULL),
+                     
+                     collect_dt = col_datetime(format = "%Y/%m/%d %H:%M:%S"), 
+                     
+                     
+                     
+                     
+                     
+                     pat_type = col_factor(NULL)))
+summary(chem_data)
+```
+
+**Stop Here**
+
+## Exporting Data
+
+The most efficient workflow for many data analysis projects is to develop a Quarto file that integrates a narrative analysis with the code. You starts with raw data, perform data cleaning and transformation, perform calculations/statistical tests, and generate plots, all within a single report that can be shared with others. However, in many contexts you may want to perform some data preparation or analysis and hand off the data to colleagues. Or you may want to do some heavy lifting in terms of data preparation/analysis that takes too long to repeat every time you want to do the analysis and save files from that work to pick up later.
+
+It would be helpful to create a file from R that we can then save and share if needed. Within the *readr* package (that is included when you call `library(tidyverse)`) there are functions to help you write data frames to files - essentially the opposite of `read_csv()`. Let's use the `write_csv()` function to write our *chem_data* dataframe to a file.
+
+1.  First, to better segregate our data from our analysis files, use the New Folder button in your Files window to create a new folder called *output*. You should be in the Home \> projects \> core directory.
+2.  In the code chunk below, use the `write_csv()` function to write your *chem_data* dataframe to a file called *chem_data_mod_types.csv* (since we modified some data types) in the *output* folder. Recall that the syntax for navigating to a different folder under than the one you are in is to provide the "path" to the destination, e.g. "folder/file_name.csv". Replace the dummy variables that have been included
+3.  Navigate to your output folder in the Files window. Click the box to the left of your *chem_data_mod_types.csv* file to select it. In the More options under the Files window, select *Export*. You will be presented with a window to download the file you selected. This should be downloaded onto your local drive on your computer, in your default folder to receive downloads.
+4.  Open the file you downloaded to your system in Excel. Compare it with the original *chem_data.csv* file that you uploaded earlier in the lesson. Are there any differences?
+
+```{r}
+write_csv(data_frame, file = "folder/file_name.csv")
+```
+
+**Stop Here**
