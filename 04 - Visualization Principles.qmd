@@ -1,0 +1,35 @@
+---
+title: "Exercises for 04 - Visualization Principles"
+format: html
+editor: visual
+---
+
+## Setup Code Chunk
+
+Run this to reload your *chem* dataframe and set up the additional data sets we will use in the exercises.
+
+```{r setup}
+## remove all user defined objects in your workspace
+rm(list=ls())
+
+library(tidyverse)  # Provides functions used throughout this session
+
+chem <- read_csv("data/chem_data.csv", 
+    col_types = cols(gender = col_factor(),
+                     pregnancy_status_at_exam = col_factor(),
+                     collect_dt = col_datetime("%Y/%m/%d %H:%M:%S"), 
+                     receive_dt = col_datetime("%Y/%m/%d %H:%M:%S"), 
+                     verify_dt = col_datetime("%Y/%m/%d %H:%M:%S"), 
+                     pat_type = col_factor(),
+                     payor_groups = col_factor(),
+                     test = col_factor(),
+                     units = col_factor())) # Read in data - note we determined data types up front
+# the code below prepares a data set that contains only potassium values
+k_data <- chem |> 
+  filter(test == 'potassium')
+# the code below prepares a data set that contains electrolytes commonly assayed in a metabolic panel
+lyte_data <- chem |> 
+  filter(test %in% c('sodium', 'potassium', 'chloride', 'bicarbonate'))
+```
+
+**Stop Here**
