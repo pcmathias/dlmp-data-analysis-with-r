@@ -39,7 +39,8 @@ This course content was developed by the following people:
   * Amrom Obstfeld
   * Joseph Rudolf
   * Robert Benirschke
-  * Michelle Stoffel (data request content)
+  * Michelle Stoffel
+  * Shannon Haymond
   
 The workshop also integrates content, best practices, and lessons from a variety of educators in the R community. We would like to specifically acknowledge: 
 
